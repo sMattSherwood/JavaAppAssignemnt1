@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Assignment1</string>
+    <string name="desc">guess game</string>
+    <string name="reset">reset</string>
+    <string name="MatchGame">Match Game</string>
+</resources>
