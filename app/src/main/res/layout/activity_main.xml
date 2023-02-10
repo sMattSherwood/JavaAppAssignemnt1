@@ -8,7 +8,7 @@
     tools:context=".MainActivity">
 
     <TableLayout
-        android:id="@+id/tableLayout"
+        android:id="@+id/matchTable"
         android:layout_width="342dp"
         android:layout_height="460dp"
         android:layout_marginStart="35dp"
