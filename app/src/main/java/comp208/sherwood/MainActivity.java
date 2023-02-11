@@ -2,78 +2,100 @@ package comp208.sherwood;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    int[] imgId = {1,2,3,4,5,6,1,2,3,4,5,6}; // Id's for the pictures
-    int length = imgId.length;
-    int row = 3;
-    int col = 4;
-    Card[][] match = new Card[row][col];
+    int row = 4;
+    int col = 3;
+    Card[][] cards = new Card[row][col];
     TableLayout board;
+    Card cardMatch1, cardMatch2;
+    int matchesFound = 0;
+
+
+   int[] deck = {
+           R.drawable.shape1,
+           R.drawable.shape2,
+           R.drawable.shape3,
+           R.drawable.shape4,
+           R.drawable.shape5,
+           R.drawable.shape6
+   };
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        board = (TableLayout)findViewById(R.id.matchTable);
+        board =(TableLayout) findViewById(R.id.matchTable);
+        setUp();
     }
 
-    public void suffleArray(int[] array, int length)
+    public void setUp(){
+        int count = 0;
+        Collections.shuffle(Arrays.asList(deck));
+        for(int x = 0; x < row; x++)
+        {
+            TableRow tr = (TableRow) board.getChildAt(x);
+            for(int y = 0; y < col; y++)
+            {
+                ImageView iv = (ImageView) tr.getChildAt(y);
+                cards[x][y] = new Card(x,y);
+                cards[x][y].setFaceID(deck[count % deck.length]);
+                iv.setImageResource(cards[x][y].getFaceID());
+                count++;
+            }
+
+        }
+
+    }
+
+
+    public void compareCards(ImageView imageView, Card card)
     {
-        Random random = new Random();
-        for(int i = length-1; i > 0; i--){
-            int j = random.nextInt(i+1);
-            int temp = array[i];
-            array[i] = array[j];
-            array[j] = temp;
+        if(cardMatch1 == null)
+        {
+            cardMatch1 = card;
+            imageView.setImageResource(cardMatch1.getFaceID());
         }
-    }
+        else{
+            cardMatch2 = card;
+            imageView.setImageResource(cardMatch2.getFaceID());
 
-
-    public void setValue() {
-        for(int x = 0; x < row; x++){
-            TableRow tr = (TableRow) board.getChildAt(x);
-            for(int y = 0; y < col; y++){
-                ImageView iv = (ImageView) board.getChildAt(y);
-                match[x][y] = new Card(x,y);
-                match[x][y].setFaceID(R.drawable.queston);
-                iv.setTag(match[x][y]);
-                iv.setImageResource(R.drawable.queston);
+            if(cardMatch1.getFaceID() == cardMatch2.getFaceID())
+            {
+                matchesFound++;
+                if(matchesFound == 6)
+                {
+                    winCondition();
+                }
             }
+            cardMatch1 = null;
+            cardMatch2 = null;
         }
     }
 
-    /*
-    * when button pressed the game will reset
-    * */
-    public void resetGame(View view){
-        for(int x = 0; x < row; x++){
-            TableRow tr = (TableRow) board.getChildAt(x);
-            for(int y = 0; y < col; y++){
-                ImageView iv = (ImageView) board.getChildAt(y);
-                match[x][y].setFaceID(R.drawable.queston);
-                iv.setImageResource(R.drawable.queston);
-            }
-        }
+    public void winCondition()
+    {
+        Intent intent = new Intent(this, WinScrene.class);
+        intent.putExtra("matches", matchesFound);
+        startActivityForResult(intent, 1);
+
     }
 
-    public void revealTile(View view){
-        ImageView img = (ImageView) view;
-        Card current = (Card) img.getTag();
 
-        if(current.faceID == R.drawable.queston){
-            img.setImageResource(R.drawable.);
-        }
-    }
+
+
 
 
 }
