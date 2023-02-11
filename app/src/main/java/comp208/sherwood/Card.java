@@ -2,10 +2,9 @@ package comp208.sherwood;
 
 public class Card {
 
-    int faceID;
-    int row;
-    int col;
-    boolean flipped;
+    int faceID; // cardID
+    int row; //row
+    int col; // column
 
     public void setFaceID(int faceID) {
         this.faceID = faceID;
@@ -15,9 +14,6 @@ public class Card {
         return faceID;
     }
 
-    public void setFlipped(boolean flipped) {
-        this.flipped = flipped;
-    }
     public Card(int row, int col) {
         this.row = row;
         this.col = col;
